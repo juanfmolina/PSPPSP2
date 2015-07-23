@@ -8,7 +8,7 @@ import co.edu.udea.ps.psp.p2.countermodel.MathCalculator;
 import co.edu.udea.ps.psp.p2.exception.MathModelException;
 import co.edu.udea.ps.psp.p2.filemanager.FileManager;
 
-public class Controller {
+public class Controller{
 	private FileManager fileManager;
 	private MathCalculator calculator;
 	

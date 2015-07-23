@@ -12,17 +12,20 @@ public class FileManager {
 	private static final String VALID_EXTENSION = "java";
 	private static final char EXTENSION_SEPARATOR = '.';
 
-	public String getAllLinesOfDirectory(String path) throws FileNotFoundException{
+	public LinkedList<String> getAllLinesOfDirectory(String path) throws FileNotFoundException {
+		LinkedList<String> listOfFiles = new LinkedList<>();
 		File folder = new File(path);
 		File[] files = folder.listFiles();
-		String contentOfFile="";
-		if (files==null) {
+		if (files == null) {
 			throw new FileNotFoundException();
 		}
 
 		for (int i = 0; i < files.length; i++) {
 			if (files[i].isFile()) {
+				String contentOfFile = "";
 				if (validateExtension(files[i].getName())) {
+
+					
 
 					BufferedReader reader = new BufferedReader(new FileReader(files[i]));
 
@@ -30,7 +33,7 @@ public class FileManager {
 					try {
 						while ((line = reader.readLine()) != null) {
 							if (line != null && !line.equals("")) {
-								contentOfFile+=line;
+								contentOfFile += line;
 							}
 
 						}
@@ -44,14 +47,16 @@ public class FileManager {
 						} catch (IOException e) {
 						}
 					}
+
 				}
-			}else if (files[i].isDirectory()) {
-				contentOfFile+= getAllLinesOfDirectory(files[i].getAbsolutePath());
+				listOfFiles.add(contentOfFile);
+			} else if (files[i].isDirectory()) {
+				listOfFiles.addAll(getAllLinesOfDirectory(files[i].getAbsolutePath()));
 			}
 
 		}
 
-		return contentOfFile;
+		return listOfFiles;
 	}
 
 	public boolean validateExtension(String name) {
