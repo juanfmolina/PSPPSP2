@@ -37,6 +37,7 @@ public class FileManager {
 							}
 
 						}
+						listOfFiles.add(contentOfFile);
 					} catch (IOException e) {
 						e.printStackTrace();
 					} finally {
@@ -49,7 +50,7 @@ public class FileManager {
 					}
 
 				}
-				listOfFiles.add(contentOfFile);
+				
 			} else if (files[i].isDirectory()) {
 				listOfFiles.addAll(getAllLinesOfDirectory(files[i].getAbsolutePath()));
 			}

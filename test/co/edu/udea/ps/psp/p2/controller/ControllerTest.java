@@ -2,74 +2,45 @@ package co.edu.udea.ps.psp.p2.controller;
 
 import static org.junit.Assert.*;
 
-import java.util.LinkedList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import co.edu.udea.ps.psp.p2.controller.Controller;
-import co.edu.udea.ps.psp.p2.exception.MathModelException;
+import co.edu.udea.ps.psp.p2.exception.CounterModelException;
+import co.edu.udea.ps.psp.p2.model.ClassComponent;
+import co.edu.udea.ps.psp.p2.model.MethodComponent;
 
 public class ControllerTest {
-
 	private Controller controller;
 
-	private String path = "D:\\prueba.txt";
-	private String pathNoExist= "D:\\prueba2.txt";
-	private String pathBadNumbers= "D:\\prueba3.txt";
-	
 	@Before
 	public void setUp() throws Exception {
 		controller= new Controller();
 	}
 
-	@Test
-	public void testGetNumbersFromFileControllerFileDoesntExist() {
+	@Test(expected= CounterModelException.class)
+	public void testGetCountedClassesWithDirectoryNotFound() throws CounterModelException {
+		String rootDirectory= "C:\\Users\\ASUS\\git\\PSPPSP3";
+		controller.getCountedClasses(rootDirectory);
 		
-		LinkedList<Double> numbers;
-		try {
-			numbers = controller.getnumbersFromFile(pathNoExist);
-		} catch (MathModelException e) {
-			assertEquals("El archivo no existe", e.getMessage());
-		}
 	}
 	
 	@Test
-	public void testGetNumbersFromFileControllerThreeNumbers() {
-		
-		LinkedList<Double> numbers;
-		try {
-			numbers = controller.getnumbersFromFile(path);
-			assertEquals(3, numbers.size());
-		} catch (MathModelException e) {
-			assertEquals("El archivo no existe", e.getMessage());
+	public void testGetCountedClassesWithTenClasses() throws CounterModelException {
+		String rootDirectory= "C:\\Users\\ASUS\\git\\PSPPSP2";
+		List<ClassComponent>classComponents=controller.getCountedClasses(rootDirectory);
+		for (ClassComponent classComponent : classComponents) {
+			System.out.println(classComponent.getNameOfClass());
+			System.out.println("Number of Lines: "+classComponent.getNumberOfLinesOfCode());
+			for (MethodComponent methodComponent : classComponent.getMethods()) {
+				System.out.println("\t"+methodComponent.getNameOfComponent());
+				System.out.println("\tNumber of Lines: "+methodComponent.getNumberOfLinesOfCode());
+				System.out.println();
+			}
 		}
-	}
-	
-	@Test
-	public void testCalculateMean() {
+		assertEquals(8, classComponents.size());
 		
-		double mean= 0;
-		try {
-			
-			mean = controller.calculateMean(controller.getnumbersFromFile(path));
-			assertEquals(2.1666666, mean, 0.0001);
-		} catch (MathModelException e) {
-			assertEquals("El archivo no existe", e.getMessage());
-		}
-	}
-	
-	@Test
-	public void testCalculateStandardDesviation() {
-		
-		double mean= 0;
-		try {
-			
-			mean = controller.calculateStandardDesviation(controller.getnumbersFromFile(path));
-			assertEquals(1.258305, mean, 0.0001);
-		} catch (MathModelException e) {
-			assertEquals("El archivo no existe", e.getMessage());
-		}
 	}
 
 }
